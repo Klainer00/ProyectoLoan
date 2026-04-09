@@ -42,29 +42,17 @@ Para replicar o contribuir a este proyecto, el entorno local debe cumplir con lo
 ## Estructura del Repositorio
 
 ├── data/                   # Datos crudos y procesados
-
 ├── models/                 # Modelos entrenados
-
 ├── src/                    # Código fuente principal
-
 │   ├── ingestion/          # Scripts de carga y validación de datos
-
 │   ├── processing/         # Limpieza, transformación y entrenamiento
-
 │   └── api/                # Endpoints del backend para consumir el modelo
-
 ├── tests/                  # Pruebas unitarias y de integración
-
 ├── .github/workflows/      # Pipelines de CI/CD con GitHub Actions
-
 ├── .env.example            # Plantilla de variables de entorno
-
 ├── docker-compose.yml      # Orquestación de contenedores
-
 ├── Dockerfile              # Configuración de la imagen del contenedor
-
 ├── requirements.txt        # Dependencias de Python
-
 └── README.md               # Documentación del proyecto
 
 

@@ -32,7 +32,7 @@ La elección de estas tecnologías se fundamenta en tres pilares críticos exigi
 
 Para replicar o contribuir a este proyecto, el entorno local debe cumplir con los siguientes requisitos:
 
-- **Lenguaje:** Python 3.12+
+- **Lenguaje:** Python 3.12
 - **Control de Versiones:** Git
 - **Contenerización:** Docker y Docker Compose
 - **Base de Datos:** PostgreSQL

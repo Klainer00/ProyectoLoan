@@ -41,21 +41,23 @@ Para replicar o contribuir a este proyecto, el entorno local debe cumplir con lo
 
 ## Estructura del Repositorio
 
-├── data/                   # Datos crudos y procesados  
-├── models/                 # Modelos entrenados  
-├── src/                    # Código fuente principal  
-│   ├── ingestion/          # Scripts de carga y validación de datos  
-│   ├── processing/         # Limpieza, transformación y entrenamiento  
-│   └── api/                # Endpoints del backend para consumir el modelo  
-├── tests/                  # Pruebas unitarias y de integración  
-├── .github/workflows/      # Pipelines de CI/CD con GitHub Actions  
-├── .env.example            # Plantilla de variables de entorno  
-├── docker-compose.yml      # Orquestación de contenedores  
-├── Dockerfile              # Configuración de la imagen del contenedor  
-├── requirements.txt        # Dependencias de Python  
-└── README.md               # Documentación del proyecto
+├── .github/  
+│   └── workflows/          # GitHub Actions (CI/CD)  
+├── data/  
+│   └── 02_loan_data.csv    # Dataset original  
+├── scripts/  
+│   ├── ingesta.py  
+│   ├── limpieza.py  
+│   ├── carga_bd.py  
+│   └── entrenamiento.py  
+├── docs/  
+│   └── DISEÑO_TECNICO.md   # Documento técnico completo  
+├── .env                    # Credenciales (No versionado)  
+├── Dockerfile  
+├── README.md  
+└── requirements.txt  
 
-
+  
 ## Equipo
 **Eduardo Paredes** – Procesamiento y limpieza
 **Bryan Jara** – Modelado y entrenamiento

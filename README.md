@@ -40,9 +40,10 @@ Para replicar o contribuir a este proyecto, el entorno local debe cumplir con lo
 - **Editor Sugerido:** Visual Studio Code
 
 ## Estructura del Repositorio
-├── data/                   # Datos crudos y procesados
-├── models/                 # Modelos entrenados
-├── src/                    # Código fuente principal
+
+#├── data/                   # Datos crudos y procesados
+#├── models/                 # Modelos entrenados
+#├── src/                    # Código fuente principal
 │   ├── ingestion/          # Scripts de carga y validación de datos
 │   ├── processing/         # Limpieza, transformación y entrenamiento
 │   └── api/                # Endpoints del backend para consumir el modelo

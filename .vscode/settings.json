@@ -1,0 +1,37 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "dbloan_02",
+            "username": "admin",
+            "database": "bdloan",
+            "password": "asdasd123"
+        },
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "proyectoloan",
+            "database": "datosloan",
+            "username": "admin",
+            "password": "asdasd123"
+        },
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "Loan",
+            "database": "postgres",
+            "username": "postgres",
+            "password": "duoc123"
+        }
+    ]
+}

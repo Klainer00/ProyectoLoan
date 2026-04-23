@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # Servicio de la Base de Datos
+  db:
+    image: postgres:15
+    container_name: loan_db
+    restart: always
+    # Usamos las mismas credenciales de tu archivo .env
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: asdasd123
+      POSTGRES_DB: dbloan_02
+    ports:
+      - "5432:5432"
+    volumes:
+      # IMPORTANTE: Esto ejecuta tu script dbloan.sql automáticamente al crear la BD
+      - ./bd/dbloan.sql:/docker-entrypoint-initdb.d/init.sql
+      # Esto guarda los datos de la BD en tu PC para que no se borren si apagas Docker
+      - postgres_data:/var/lib/postgresql/data
+
+  # Servicio de tu aplicación Python
+  app:
+    build: .
+    container_name: loan_app
+    depends_on:
+      - db
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+
+volumes:
+  postgres_data:

@@ -1,4 +1,5 @@
 import psycopg2
+import psycopg2.extras
 import pandas as pd
 import os
 from dotenv import load_dotenv
@@ -25,39 +26,32 @@ def cargar_datos():
         df = pd.read_csv(csv_path)
         print(f"CSV cargado: {len(df)} filas encontradas.")
 
-        # 2. INSERTAR DATOS EN LA TABLA loan_data
+        # 2. ADAPTAR DATOS A LA BASE DE DATOS
+        # Convertir previous_loan_defaults_on_file a booleano
+        df['previous_loan_defaults_on_file'] = df['previous_loan_defaults_on_file'].map(
+            {'Yes': True, 'No': False, True: True, False: False}
+        )
+        
+        # Convertir loan_status a booleano (0 -> False, 1 -> True)
+        df['loan_status'] = df['loan_status'].astype(bool)
+        
+        # Reemplazar valores NaN por None para que se inserten como NULL en PostgreSQL
+        df = df.where(pd.notnull(df), None)
+
+        # 3. INSERTAR DATOS EN LA TABLA loan_data (USANDO execute_values PARA OPTIMIZAR)
         query_insertar = """
         INSERT INTO loan_data 
         (person_age, person_gender, person_education, person_income, person_emp_exp, 
          person_home_ownership, loan_amnt, loan_intent, loan_int_rate, loan_percent_income, 
          cb_person_cred_hist_length, credit_score, previous_loan_defaults_on_file, loan_status) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+        VALUES %s;
         """
         
-        # Convertir booleanos a formato esperado por PostgreSQL
-        df['previous_loan_defaults_on_file'] = df['previous_loan_defaults_on_file'].map(
-            {'Yes': True, 'No': False, True: True, False: False}
-        )
+        # Convertir el DataFrame a una lista de tuplas
+        valores = [tuple(x) for x in df.to_numpy()]
         
-        # Insertar cada fila del DataFrame
-        for index, row in df.iterrows():
-            valores = (
-                row['person_age'],
-                row['person_gender'],
-                row['person_education'],
-                row['person_income'],
-                row['person_emp_exp'],
-                row['person_home_ownership'],
-                row['loan_amnt'],
-                row['loan_intent'],
-                row['loan_int_rate'],
-                row['loan_percent_income'],
-                row['cb_person_cred_hist_length'],
-                row['credit_score'],
-                row['previous_loan_defaults_on_file'],
-                row['loan_status']
-            )
-            cursor.execute(query_insertar, valores)
+        # Ejecutar inserción en bloque (batch insert) que es mucho más rápida
+        psycopg2.extras.execute_values(cursor, query_insertar, valores, page_size=1000)
         
         print(f"✓ {len(df)} registros insertados correctamente en la tabla 'loan_data'.")
 

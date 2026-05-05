@@ -1,69 +1,87 @@
+"""
+carga_bd.py — Carga de Datos Limpios en PostgreSQL
+===================================================
+Importa el pipeline de limpieza (clean.py), obtiene el DataFrame
+procesado y lo inserta de forma eficiente en la tabla 'loan_data'
+de la base de datos PostgreSQL configurada en el archivo .env.
+"""
+
 import psycopg2
 import psycopg2.extras
-import pandas as pd
 import os
 from dotenv import load_dotenv
 
-# Esto carga las variables de tu archivo .env automáticamente
+# Importamos el pipeline de limpieza
+from clean import pipeline_limpieza
+
+# Carga las variables del archivo .env automáticamente
 load_dotenv()
 
+
+def obtener_conexion():
+    """Crea y devuelve una conexión a PostgreSQL usando las variables de entorno."""
+    return psycopg2.connect(
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+    )
+
+
 def cargar_datos():
+    """
+    Orquesta el pipeline completo:
+      1. Limpia y transforma los datos con clean.pipeline_limpieza()
+      2. Conecta a PostgreSQL
+      3. Inserta los registros en lote en la tabla 'loan_data'
+    """
+    conexion = None
+    cursor = None
+
     try:
-        # Nos conectamos usando las variables de entorno, sin exponer contraseñas
-        conexion = psycopg2.connect(
-            host=os.getenv("DB_HOST"),
-            port=os.getenv("DB_PORT"),
-            dbname=os.getenv("DB_NAME"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD")
-        )
-        
-        conexion.autocommit = True 
+        # ── 1. LIMPIEZA Y TRANSFORMACIÓN ──────────────────────────────────────
+        df = pipeline_limpieza()
+
+        # ── 2. CONEXIÓN A LA BASE DE DATOS ────────────────────────────────────
+        print("[BD] Conectando a PostgreSQL...")
+        conexion = obtener_conexion()
+        conexion.autocommit = True
         cursor = conexion.cursor()
+        print(f"[BD] Conexión establecida con '{os.getenv('DB_NAME')}' en {os.getenv('DB_HOST')}")
 
-        # 1. LEER EL CSV CON PANDAS
-        csv_path = os.path.join(os.path.dirname(__file__), "../data/02_loan_data.csv")
-        df = pd.read_csv(csv_path)
-        print(f"CSV cargado: {len(df)} filas encontradas.")
-
-        # 2. ADAPTAR DATOS A LA BASE DE DATOS
-        # Convertir previous_loan_defaults_on_file a booleano
-        df['previous_loan_defaults_on_file'] = df['previous_loan_defaults_on_file'].map(
-            {'Yes': True, 'No': False, True: True, False: False}
-        )
-        
-        # Convertir loan_status a booleano (0 -> False, 1 -> True)
-        df['loan_status'] = df['loan_status'].astype(bool)
-        
-        # Reemplazar valores NaN por None para que se inserten como NULL en PostgreSQL
-        df = df.where(pd.notnull(df), None)
-
-        # 3. INSERTAR DATOS EN LA TABLA loan_data (USANDO execute_values PARA OPTIMIZAR)
+        # ── 3. INSERCIÓN EN LOTE (batch insert) ───────────────────────────────
         query_insertar = """
-        INSERT INTO loan_data 
-        (person_age, person_gender, person_education, person_income, person_emp_exp, 
-         person_home_ownership, loan_amnt, loan_intent, loan_int_rate, loan_percent_income, 
-         cb_person_cred_hist_length, credit_score, previous_loan_defaults_on_file, loan_status) 
-        VALUES %s;
+            INSERT INTO loan_data (
+                person_age, person_gender, person_education, person_income,
+                person_emp_exp, person_home_ownership, loan_amnt, loan_intent,
+                loan_int_rate, loan_percent_income, cb_person_cred_hist_length,
+                credit_score, previous_loan_defaults_on_file, loan_status
+            ) VALUES %s;
         """
-        
-        # Convertir el DataFrame a una lista de tuplas
-        valores = [tuple(x) for x in df.to_numpy()]
-        
-        # Ejecutar inserción en bloque (batch insert) que es mucho más rápida
-        psycopg2.extras.execute_values(cursor, query_insertar, valores, page_size=1000)
-        
-        print(f"✓ {len(df)} registros insertados correctamente en la tabla 'loan_data'.")
 
-    except Exception as error:
-        print(f"Error al conectar con PostgreSQL: {error}")
+        # Convertir el DataFrame a lista de tuplas
+        valores = [tuple(fila) for fila in df.to_numpy()]
 
+        # execute_values inserta en bloques de 1 000 filas por batch (mucho más rápido que row-by-row)
+        psycopg2.extras.execute_values(cursor, query_insertar, valores, page_size=1_000)
+
+        print(f"[BD] ✓ {len(df):,} registros insertados correctamente en 'loan_data'.")
+
+    except psycopg2.OperationalError as e:
+        print(f"[ERROR] No se pudo conectar a PostgreSQL: {e}")
+        raise
+    except Exception as e:
+        print(f"[ERROR] Fallo durante la carga: {e}")
+        raise
     finally:
-        if 'conexion' in locals() and conexion:
+        if cursor:
             cursor.close()
+        if conexion:
             conexion.close()
-            print("Conexión cerrada.")
+            print("[BD] Conexión cerrada.")
 
-# Ejecutar el script
+
+# ─── Punto de entrada ─────────────────────────────────────────────────────────
 if __name__ == "__main__":
     cargar_datos()

@@ -50,11 +50,11 @@ Para replicar o contribuir a este proyecto, el entorno local debe cumplir con lo
     ├── clean.py  
     ├── correccionfilter.py  
     ├── entrenamiento.py  
-    ├── feature_engineering.py
-    └── limpieza_transformacion.py
-    └── monitoreo_alertas.py
-    └── quality_check.py
-    └── winsorizer.py
+    ├── feature_engineering.py    
+    └── limpieza_transformacion.py    
+    └── monitoreo_alertas.py    
+    └── quality_check.py    
+    └── winsorizer.py    
 ├── docs/  
 │   └── DISEÑO_TECNICO.md   # Documento técnico completo  
 ├── .env                    # Credenciales (No versionado)  

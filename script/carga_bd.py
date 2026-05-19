@@ -52,7 +52,7 @@ def cargar_datos():
 
         # ── 3. INSERCIÓN EN LOTE (batch insert) ───────────────────────────────
         query_insertar = """
-            INSERT INTO loan_data (
+            INSERT INTO loan_data_clean (
                 person_age, person_gender, person_education, person_income,
                 person_emp_exp, person_home_ownership, loan_amnt, loan_intent,
                 loan_int_rate, loan_percent_income, cb_person_cred_hist_length,

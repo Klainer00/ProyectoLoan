@@ -45,11 +45,16 @@ Para replicar o contribuir a este proyecto, el entorno local debe cumplir con lo
 │   └── workflows/          # GitHub Actions (CI/CD)  
 ├── data/  
 │   └── 02_loan_data.csv    # Dataset original  
-├── scripts/  
-│   ├── ingesta.py  
-│   ├── limpieza.py  
-│   ├── carga_bd.py  
-│   └── entrenamiento.py  
+├── scripts/ 
+    ├── carga_bd.py  
+    ├── clean.py  
+    ├── correccionfilter.py  
+    ├── entrenamiento.py  
+    ├── feature_engineering.py
+    └── limpieza_transformacion.py
+    └── monitoreo_alertas.py
+    └── quality_check.py
+    └── winsorizer.py
 ├── docs/  
 │   └── DISEÑO_TECNICO.md   # Documento técnico completo  
 ├── .env                    # Credenciales (No versionado)  

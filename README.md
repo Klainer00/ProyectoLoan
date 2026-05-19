@@ -45,8 +45,8 @@ Para replicar o contribuir a este proyecto, el entorno local debe cumplir con lo
 │   └── workflows/          # GitHub Actions (CI/CD)  
 ├── data/  
 │   └── 02_loan_data.csv    # Dataset original  
-├── scripts/ 
-    ├── carga_bd.py  
+├── scripts/     
+    ├── carga_bd.py      
     ├── clean.py  
     ├── correccionfilter.py  
     ├── entrenamiento.py  

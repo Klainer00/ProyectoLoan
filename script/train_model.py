@@ -22,7 +22,7 @@ os.makedirs("models", exist_ok=True)
 # -------------------------------------------------
 # Cargar datos
 # -------------------------------------------------
-data = pd.read_csv("data/02_loan_data.csv")
+data = pd.read_csv("data/03_loan_data_cleaned.csv")
 
 # Variable objetivo
 target = "loan_status"

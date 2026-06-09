@@ -13,7 +13,7 @@ def tratar_duplicados(X: pd.DataFrame, drop=True):
     return X.drop_duplicates() if drop else X
 
 
-data_for_preparation = pd.read_csv("data/02_loan_data.csv")
+data_for_preparation = pd.read_csv("data/03_loan_data_cleaned.csv")
 target = "loan_status"
 
 X = data_for_preparation.drop(columns=[target], errors="ignore")

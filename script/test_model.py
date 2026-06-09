@@ -28,7 +28,7 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 # -------------------------------------------------
 # Cargar datos
 # -------------------------------------------------
-data = pd.read_csv("data/02_loan_data.csv")
+data = pd.read_csv("data/03_loan_data_cleaned.csv")
 
 target = "loan_status"
 

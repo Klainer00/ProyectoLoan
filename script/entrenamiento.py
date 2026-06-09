@@ -16,7 +16,7 @@ def tratar_duplicados(X):
     return X.drop_duplicates()
 
 # 1. Cargar los datos limpios
-data = pd.read_csv("data/02_loan_data.csv")
+data = pd.read_csv("data/03_loan_data_cleaned.csv")
 
 X = data.drop(columns=[target], errors="ignore")
 y = data[target]

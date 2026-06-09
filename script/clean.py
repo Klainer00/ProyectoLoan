@@ -342,3 +342,7 @@ def generar_reporte(df):
 if __name__ == "__main__":
     df_limpio = pipeline_limpieza()
     generar_reporte(df_limpio)
+    
+    out_path = os.path.join(os.path.dirname(__file__), "../data/03_loan_data_cleaned.csv")
+    df_limpio.to_csv(out_path, index=False)
+    print(f"[EXPORTACION] DataFrame limpio guardado en: {out_path}")

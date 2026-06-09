@@ -1,6 +1,8 @@
 import pickle
 import os
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -193,15 +195,8 @@ plt.close()
 # -------------------------------------------------
 rf_model = model.named_steps["classifier"]
 
-# Recuperamos nombres de variables tras el preprocesamiento
-preprocessor_names = model.named_steps["preprocessor"].get_feature_names_out()
-
-# Configuramos los nombres de variables en el correlation_filter para poder extraerlos
-correlation_filter = model.named_steps["correlation_filter"]
-correlation_filter.set_feature_names(preprocessor_names)
-
-# Nombres finales tras pasar por el filtro de correlación
-feature_names = correlation_filter.get_feature_names_out()
+# Recuperamos nombres de variables tras el preprocesamiento directamente del preprocessor
+feature_names = model.named_steps["preprocessor"].get_feature_names_out()
 
 importances = rf_model.feature_importances_
 

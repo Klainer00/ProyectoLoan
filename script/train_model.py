@@ -2,17 +2,17 @@ import pandas as pd
 import pickle
 import os
 
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier
 
-from correlation_filter import CorrelationFilter
 
-from imblearn.pipeline import Pipeline as ImbPipeline
-from imblearn.over_sampling import SMOTE
 
 # Crear carpetas de resultados y de modelos
 RESULTS_DIR = "results"
@@ -76,10 +76,9 @@ model = RandomForestClassifier(
     class_weight="balanced"
 )
 
-pipeline = ImbPipeline([
+# Pipeline
+pipeline = Pipeline([
     ("preprocessor", preprocessor),
-    ("correlation_filter", CorrelationFilter(threshold=0.9)),
-    ("smote", SMOTE(random_state=29)),
     ("classifier", model)
 ])
 

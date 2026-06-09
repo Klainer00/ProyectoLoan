@@ -1,0 +1,19 @@
+RESULTADOS DEL MODELO
+========================================
+
+Accuracy : 0.9251
+Precision: 0.8687
+Recall   : 0.7810
+F1-Score : 0.8225
+ROC-AUC  : 0.9717
+
+REPORTE DE CLASIFICACIÓN
+========================================
+              precision    recall  f1-score   support
+
+           0       0.94      0.97      0.95      7000
+           1       0.87      0.78      0.82      2000
+
+    accuracy                           0.93      9000
+   macro avg       0.90      0.87      0.89      9000
+weighted avg       0.92      0.93      0.92      9000

@@ -4,16 +4,16 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
-
 from feature_engineering import FeatureEngineering
 from correlation_filter import CorrelationFilter
 from winsorizer import Winsorizer
 
+
 def tratar_duplicados(X: pd.DataFrame, drop=True):
     return X.drop_duplicates() if drop else X
 
-data_for_preparation = pd.read_csv("data/02_loan_data.csv")
 
+data_for_preparation = pd.read_csv("data/02_loan_data.csv")
 target = "loan_status"
 
 X = data_for_preparation.drop(columns=[target], errors="ignore")
@@ -71,10 +71,12 @@ X_transformada = pipeline_preparacion.transform(X)
 cols_finales = pipeline_preparacion.named_steps["colinealidad"].features_
 
 print("\n=======================================================")
-print("  REFINERÍA DE DATOS -- LOAN APPROVAL CLASSIFICATION")
+print(" REFINERÍA DE DATOS -- LOAN APPROVAL CLASSIFICATION")
 print("=======================================================")
 print(f"Dimensiones originales: {X.shape}")
 print(f"Dimensiones tras pipeline: {X_transformada.shape}")
+print(f"\nDesbalance de clases (target):")
+print(data_for_preparation[target].value_counts())
 print(f"\nColumnas finales resultantes ({len(cols_finales)}):")
 print(cols_finales)
 print("=======================================================\n")

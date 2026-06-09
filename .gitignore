@@ -1,0 +1,17 @@
+# Python caching
+__pycache__/
+*.pyc
+
+# Environment and secrets
+.env
+
+# Large files / binary models (exceeds GitHub's 100MB limit)
+models/
+*.pkl
+
+# Log files
+*.log
+output.log
+
+# User-specific VS Code settings
+.vscode/

@@ -28,13 +28,13 @@ def ejecutar_monitoreo(csv_path):
     UMBRAL_ACEPTACION = 0.80 
     
     if score < UMBRAL_ACEPTACION:
-        print(f" ❌ [ALERTA CRÍTICA] El Quality Score ({score*100:.1f}%) está por debajo del umbral ({UMBRAL_ACEPTACION*100:.1f}%).")
-        print(" ❌ [ACCIÓN] Pipeline detenido. Se requiere revisión manual de los datos.")
+        print(f" [ALERTA CRITICA] El Quality Score ({score*100:.1f}%) esta por debajo del umbral ({UMBRAL_ACEPTACION*100:.1f}%).")
+        print(" [ACCION] Pipeline detenido. Se requiere revision manual de los datos.")
         return False
     else:
-        print(" ✅ [OK] Calidad de datos dentro de los parámetros aceptables. Continuando pipeline...")
+        print(" [OK] Calidad de datos dentro de los parametros aceptables. Continuando pipeline...")
         return True
 
 if __name__ == "__main__":
-    ruta_inconsistente = "data/02_loan_data_inconsistent.csv"
-    ejecutar_monitoreo(ruta_inconsistente)
+    ruta_principal = "data/02_loan_data.csv"
+    ejecutar_monitoreo(ruta_principal)

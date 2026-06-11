@@ -1,3 +1,4 @@
+from ProyectoLoan-main.script.entrenamiento import data
 import pandas as pd
 import numpy as np
 from sklearn.pipeline import Pipeline
@@ -16,8 +17,9 @@ def tratar_duplicados(X: pd.DataFrame, drop=True):
 data_for_preparation = pd.read_csv("data/03_loan_data_cleaned.csv")
 target = "loan_status"
 
+# inversion de variable obj: data_for_preparation[target] = ~data_for_preparation[target]
 X = data_for_preparation.drop(columns=[target], errors="ignore")
-y = data_for_preparation[target]
+y = data_for_preparation[target] 
 
 num_cols = [
     "person_age",

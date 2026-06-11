@@ -1,5 +1,6 @@
 import pickle
 import os
+import json
 import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
@@ -266,22 +267,23 @@ plt.savefig(
 )
 plt.close()
 
-# Guarda las métricas en archivo de texto
+# Guarda las métricas en archivo JSON
+metricas = {
+    "accuracy": float(accuracy),
+    "precision": float(precision),
+    "recall": float(recall),
+    "f1_score": float(f1),
+    "roc_auc": float(roc_auc),
+    "classification_report": classification_report(
+        y_test,
+        y_pred,
+        output_dict=True
+    )
+}
+
 with open(
-    os.path.join(RESULTS_DIR, "metricas.txt"),
+    os.path.join(RESULTS_DIR, "metricas.json"),
     "w",
     encoding="utf-8"
 ) as f:
-
-    f.write("RESULTADOS DEL MODELO\n")
-    f.write("=" * 40 + "\n\n")
-
-    f.write(f"Accuracy : {accuracy:.4f}\n")
-    f.write(f"Precision: {precision:.4f}\n")
-    f.write(f"Recall   : {recall:.4f}\n")
-    f.write(f"F1-Score : {f1:.4f}\n")
-    f.write(f"ROC-AUC  : {roc_auc:.4f}\n\n")
-
-    f.write("REPORTE DE CLASIFICACIÓN\n")
-    f.write("=" * 40 + "\n")
-    f.write(classification_report(y_test, y_pred))
+    json.dump(metricas, f, indent=4, ensure_ascii=False)
